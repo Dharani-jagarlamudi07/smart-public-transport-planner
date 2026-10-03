@@ -1,0 +1,12 @@
+﻿node_modules
+.next
+out
+__pycache__
+*.pyc
+.venv
+venv
+.env
+backend\data
+data\graph
+data\otp
+.DS_Store
