@@ -1,26 +1,110 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* ============ GLASSMORPHISM DESIGN SYSTEM ============ */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f0f9ff 35%, #fdf4ff 70%, #ecfeff 100%);
+  min-height: 100vh;
+}
+
+/* Animated aurora background (visible through glass, hidden behind map) */
+.app-bg {
+  position: relative;
+  isolation: isolate; /* ✅ keeps aurora blobs behind map & content */
+  background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 30%, #fce7f3 60%, #cffafe 100%);
+  overflow: hidden;
+}
+
+.app-bg::before,
+.app-bg::after {
+  content: "";
+  position: fixed;
+  width: 45vw;
+  height: 45vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  z-index: -1; /* ✅ behind the map tiles — no more pink/blue tint */
+  pointer-events: none;
+  animation: float 18s ease-in-out infinite alternate;
+}
+
+.app-bg::before {
+  background: #93c5fd;
+  top: -10%;
+  left: -8%;
+}
+
+.app-bg::after {
+  background: #f9a8d4;
+  bottom: -12%;
+  right: -8%;
+  animation-delay: -9s;
+}
+
+@keyframes float {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(6vw, 4vh) scale(1.15);
+  }
+}
+
+/* Frosted glass — main panels (sidebar, dropdowns, overlays) */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Frosted glass — cards (route options, saved commutes) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 24px rgba(31, 38, 135, 0.1);
+  border-radius: 1rem;
+}
+
+/* Dark frosted glass — voice navigation panel */
+.glass-dark {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Frosted glass — inputs & selects */
+.glass-input {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.65);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* Frosted glass — small chips & badges */
+.glass-chip {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
